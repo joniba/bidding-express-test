@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1 home
+  if !user
+    p
+      a(href="/login") login
+  else
+    p Welcome #{user} 
