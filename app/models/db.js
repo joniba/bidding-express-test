@@ -6,3 +6,4 @@ exports.connect = function (url) {
 
 exports.users = require('./user');
 exports.bids = require('./bid');
+exports.items = require('./item');
