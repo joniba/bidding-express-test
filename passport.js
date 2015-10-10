@@ -1,9 +1,7 @@
 var passport = require('passport'),
-	crypto = require('crypto'),
-	config = require('./config'),
 	db = require('./app/models'),
 	LocalStrategy = require('passport-local').Strategy,
-	GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+	BasicStrategy = require('passport-http').BasicStrategy;
 
 exports.setup = function (app) {
 
@@ -18,18 +16,8 @@ exports.setup = function (app) {
 		done(null, obj);
 	});
 
-	passport.use(new LocalStrategy(
-		function (username, password, cb) {
-			db.users.findOne({ username: username }, function (err, user) {
-				if (err) { return cb(err); }
-				if (!user) { return cb(null, false, { message: 'Incorrect username or password' }); }
-
-				var hash = crypto.pbkdf2Sync(password, user.salt, 4096, 512).toString('base64');
-
-				if (user.password != hash) { return cb(null, false, { message: 'Incorrect username or password' }); }
-				return cb(null, user);
-			});
-		}));
+	passport.use(new LocalStrategy(authenticate));
+	passport.use(new BasicStrategy(authenticate));
 
 	/*passport.use(new GoogleStrategy({
 		clientID: config.oauth.google.clientId,
@@ -49,4 +37,22 @@ exports.setup = function (app) {
 	//profile.identifier = identifier;
 	//return done(null, profile);
 	));*/
+};
+
+var authenticate = function (email, password, done) {
+	db.users.findOne({ email: email }, function (err, user) {
+		if (err) {
+			return done(err);
+		}
+
+		if (!user) {
+			return done(null, false, { message: 'Incorrect username or password' });
+		}
+
+		if (!user.authenticate(password)) {
+			return done(null, false, { message: 'Incorrect username or password' });
+		}
+
+		return done(null, user);
+	});
 };

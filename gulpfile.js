@@ -16,14 +16,14 @@ gulp.task('lint', function () {
  */
 gulp.task('server', function () {
   if (node) node.kill();
-  node = spawn('node', ['bin/www'], { stdio: 'inherit' });
+  node = spawn('node', ['--debug', 'bin/www'], { stdio: 'inherit' });
   node.on('close', function (code) {
     if (code === 8) {
-      gulp.log('Error detected, waiting for changes...');
+      console.log('Error detected, waiting for changes...');
     }
   });
   node.on('error', function (err) {
-    gulp.log(err.stack);
+    console.log(err.stack);
   });
 });
 

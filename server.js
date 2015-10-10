@@ -1,12 +1,13 @@
 var express = require('express'),
-    path = require('path'),
-    logger = require('morgan'),
-    cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser'),
-    session = require('express-session'),
-    passport = require('./passport'),
-    db = require('./app/models'),
-    config = require('./config');
+  path = require('path'),
+  logger = require('morgan'),
+  cookieParser = require('cookie-parser'),
+  bodyParser = require('body-parser'),
+  session = require('express-session'),
+  passport = require('./passport'),
+  db = require('./app/models'),
+  routes = require('./app/routes'),
+  config = require('./config');
 
 var app = express();
 
@@ -20,8 +21,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({ secret: 'lmnop' }));
 
-app.use('/', require('./app/routes/index'));
-app.use('/api/bids', require('./app/routes/bid'));
+app.use('/', routes.main);
+app.use('/api/bids', routes.bids);
 
 //
 // error handling
@@ -39,21 +40,22 @@ app.use(function (req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
+    res.send({
       message: err.message,
       error: err
     });
   });
 }
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
+else {
+  // production error handler
+  // no stacktraces leaked to user
+  app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.send('error', {
+      message: err.message,
+      error: {}
+    });
   });
-});
+}
 
 module.exports = app;

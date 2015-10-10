@@ -1,5 +1,5 @@
 module.exports = {
-	mongooseUrl: 'localhost:27017',
+	mongooseUrl: 'localhost:27017/bidding',
 	oauth: {
 		google: {
 			realm: 'http://localhost:3000/',
