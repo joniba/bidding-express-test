@@ -1,4 +1,5 @@
 var passport = require('passport'),
+	crypto = require('crypto'),
 	config = require('./config'),
 	db = require('./app/models'),
 	LocalStrategy = require('passport-local').Strategy,
@@ -16,16 +17,19 @@ exports.setup = function (app) {
 	passport.deserializeUser(function (obj, done) {
 		done(null, obj);
 	});
-	
+
 	passport.use(new LocalStrategy(
-		function(username, password, cb) {
-    db.users.findByUsername(username, function(err, user) {
-      if (err) { return cb(err); }
-      if (!user) { return cb(null, false); }
-      if (user.password != password) { return cb(null, false); }
-      return cb(null, user);
-    });
-  }));
+		function (username, password, cb) {
+			db.users.findOne({ username: username }, function (err, user) {
+				if (err) { return cb(err); }
+				if (!user) { return cb(null, false, { message: 'Incorrect username or password' }); }
+
+				var hash = crypto.pbkdf2Sync(password, user.salt, 4096, 512).toString('base64');
+
+				if (user.password != hash) { return cb(null, false, { message: 'Incorrect username or password' }); }
+				return cb(null, user);
+			});
+		}));
 
 	/*passport.use(new GoogleStrategy({
 		clientID: config.oauth.google.clientId,

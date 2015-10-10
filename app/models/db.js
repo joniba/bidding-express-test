@@ -4,5 +4,5 @@ exports.connect = function (url) {
   mongoose.connect(url);
 };
 
-exports.User = require('./user');
-exports.Bid = require('./bid');
+exports.users = require('./user');
+exports.bids = require('./bid');
