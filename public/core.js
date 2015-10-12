@@ -4,14 +4,14 @@ function bidsController($scope, $http) {
 	$scope.formData = {};
 	
 	// when landing on the page, get all bids and show them
-	$http.get('/api/bids')
-		.success(function (data) {
-			$scope.bids = data;
-			console.log(data);
-		})
-		.error(function (data) {
-			console.log('Error: ' + data);
-		});
+	//$http.get('/api/bids')
+	//	.success(function (data) {
+	//		$scope.bids = data;
+	//		console.log(data);
+	//	})
+	//	.error(function (data) {
+	//		console.log('Error: ' + data);
+	//	});
 
 	$scope.addBid = function () {
 		$http.post('/api/bids', $scope.formData)
