@@ -1,15 +1,15 @@
 var passport = require('passport');
 var router = require('express').Router();
-var bids = require('../controllers/bids.js');
+var items = require('../controllers/items.js');
 
 // authenticate
 router.use(passport.authenticate('basic', {session: false}));
 
 router.route('/')
-  .get(bids.getAll)
-  .post(bids.create);
+  .get(items.getAll)
+  .post(items.create);
 
 router.route('/:id')
-  .delete(bids.delete);
+  .delete(items.delete);
 
 module.exports = router;

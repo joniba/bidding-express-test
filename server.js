@@ -6,7 +6,7 @@ var express = require('express'),
   session = require('express-session'),
   passport = require('./passport'),
   db = require('./app/models'),
-  routes = require('./app/routes'),
+  router = require('./app/routes'),
   config = require('./config');
 
 var app = express();
@@ -20,10 +20,9 @@ app.use(logResponseBody);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({ secret: 'lmnop' }));
+app.use(session({ secret: 'lmnop', saveUninitialized: false, resave: true }));
 
-app.use('/', routes.main);
-app.use('/api/bids', routes.bids);
+router.route(app);
 
 //
 // error handling

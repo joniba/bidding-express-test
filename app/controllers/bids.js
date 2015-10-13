@@ -44,7 +44,7 @@ var self = {
 
   delete: function (req, res, next) {
     Bid.remove({
-      _id: req.params.bid_id
+      _id: req.params.id
     }, function (err, result) {
       if (err) {
         return next(err);
