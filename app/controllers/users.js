@@ -1,4 +1,3 @@
-var express = require('express');
 var passport = require('passport');
 var path = require('path');
 var User = require('mongoose').model('User');
@@ -16,17 +15,19 @@ exports.logout = function (req, res) {
 
 exports.register = function (req, res, next) {
   if (req.user)
-    res.redirect('/');
+    return res.redirect('/');
 
   var user = new User(req.body);
   user.save(function (err) {
     if (err) {
-      next(err);
+      return next(err);
     }
     req.login(user, function (err) {
       if (err) {
-        next(err);
+        return next(err);
       }
+
+      return res.redirect('/');
     });
   });
 };

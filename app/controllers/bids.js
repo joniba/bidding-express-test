@@ -10,7 +10,7 @@ var self = {
       .populate('user', 'email')
       .exec(function (err, bids) {
         if (err)
-          next(err);
+          return next(err);
 
         res.json(bids);
       });
@@ -19,12 +19,12 @@ var self = {
   create: function (req, res, next) {
     Item.findOne({_id: req.body.itemId}, function (err, item) {
       if (err)
-        next(err);
+        return next(err);
 
       if (!item) {
         err = new Error('Associated item could not be found.');
         err.status = 400;
-        next(err);
+        return next(err);
       }
 
       Bid.create({
@@ -33,7 +33,7 @@ var self = {
         amount: req.body.amount
       }, function (err, bid) {
         if (err) {
-          next(err);
+          return next(err);
         }
 
         bid.item = item;
@@ -47,7 +47,7 @@ var self = {
       _id: req.params.bid_id
     }, function (err, result) {
       if (err) {
-        next(err);
+        return next(err);
       }
 
       res.json(result);
