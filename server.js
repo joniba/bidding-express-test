@@ -18,9 +18,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 app.use(logResponseBody);
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(session({ secret: 'lmnop', saveUninitialized: false, resave: true }));
+app.use(session({secret: 'lmnop', saveUninitialized: false, resave: true}));
 
 router.route(app);
 
@@ -66,18 +66,27 @@ function logResponseBody(req, res, next) {
   var chunks = [];
 
   res.write = function (chunk) {
-    chunks.push(chunk);
+    try {
+      chunks.push(chunk);
+    }
+    catch (e) {
+      console.log(e);
+    }
 
     oldWrite.apply(res, arguments);
   };
 
   res.end = function (chunk) {
-    if (chunk)
-      chunks.push(chunk);
+    try {
+      if (chunk)
+        chunks.push(chunk);
 
-    var body = Buffer.concat(chunks).toString('utf8');
-    console.log(req.path, body);
-
+      var body = Buffer.concat(chunks).toString('utf8');
+      console.log(req.path, body);
+    }
+    catch (e) {
+      console.log(e);
+    }
     oldEnd.apply(res, arguments);
   };
 
