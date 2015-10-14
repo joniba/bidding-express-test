@@ -9,6 +9,10 @@ gulp.task('lint', function () {
     .pipe(plugins.jshint.reporter('default'));
 });
 
+gulp.task('test', function(){
+  return gulp.src('./test/*.spec.js').pipe(plugins.mocha());
+});
+
 // Taken from: https://gist.github.com/webdesserts/5632955
 /**
  * $ gulp server
@@ -27,10 +31,14 @@ gulp.task('server', function () {
   });
 });
 
-gulp.task('default', ['server', 'lint', 'watch']);
+gulp.task('default', ['lint', 'server', 'watch']);
 
 gulp.task('watch', function () {
-  gulp.watch(['./**/*.js', '!./node_modules/**'], ['server', 'lint']);
+  gulp.watch(['./**/*.js', '!./node_modules/**'], ['lint', 'server']);
+});
+
+gulp.task('watch-test', ['test'], function () {
+  gulp.watch(['./**/*.js', '!./node_modules/**'], ['test']);
 });
 
 // clean up if an error goes unhandled.

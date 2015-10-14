@@ -17,7 +17,10 @@ passport.setup(app);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 app.use(logResponseBody);
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+  verify: function(req, res, buf, encoding) {
+    console.log(req.path + ' [request]', buf.toString());
+  }}));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(session({secret: 'lmnop', saveUninitialized: false, resave: true}));
@@ -82,7 +85,7 @@ function logResponseBody(req, res, next) {
         chunks.push(chunk);
 
       var body = Buffer.concat(chunks).toString('utf8');
-      console.log(req.path, body);
+      console.log(req.path + ' [response]', body);
     }
     catch (e) {
       console.log(e);

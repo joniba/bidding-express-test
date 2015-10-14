@@ -33,6 +33,9 @@ var self = {
         amount: req.body.amount
       }, function (err, bid) {
         if (err) {
+          if (err.name && err.name === "ValidationError") {
+            err.status = 400;
+          }
           return next(err);
         }
 

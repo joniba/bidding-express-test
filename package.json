@@ -21,9 +21,14 @@
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
+    "chai": "^3.3.0",
+    "chai-match-json": "^0.1.1",
     "gulp": "^3.9.0",
     "gulp-jshint": "^1.11.2",
     "gulp-load-plugins": "^0.10.0",
-    "jshint": "^2.8.0"
+    "gulp-mocha": "^2.1.3",
+    "jshint": "^2.8.0",
+    "mocha": "^2.3.3",
+    "supertest": "^1.1.0"
   }
 }
