@@ -10,7 +10,7 @@ gulp.task('lint', function () {
 });
 
 gulp.task('test', function(){
-  return gulp.src('./test/*.spec.js').pipe(plugins.mocha());
+  return gulp.src('./tests/*.spec.js').pipe(plugins.mocha());
 });
 
 // Taken from: https://gist.github.com/webdesserts/5632955
