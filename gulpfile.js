@@ -9,7 +9,7 @@ gulp.task('lint', function () {
     .pipe(plugins.jshint.reporter('default'));
 });
 
-gulp.task('test', function(){
+gulp.task('test-only', function(){
   return gulp.src('./tests/*.spec.js').pipe(plugins.mocha());
 });
 
@@ -32,6 +32,7 @@ gulp.task('server', function () {
 });
 
 gulp.task('default', ['lint', 'server', 'watch']);
+gulp.task('test', ['server', 'test']);
 
 gulp.task('watch', function () {
   gulp.watch(['./**/*.js', '!./node_modules/**'], ['lint', 'server']);
