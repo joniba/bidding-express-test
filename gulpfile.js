@@ -9,7 +9,7 @@ gulp.task('lint', function () {
     .pipe(plugins.jshint.reporter('default'));
 });
 
-gulp.task('test', function(){
+gulp.task('mocha', function(){
   return gulp.src('./tests/*.spec.js').pipe(plugins.mocha());
 });
 
@@ -31,7 +31,11 @@ gulp.task('server', function () {
   });
 });
 
-gulp.task('default', ['lint', 'server', 'watch']);
+gulp.task('cucumber', function() {
+  return gulp.src('features/*').pipe(plugins.cucumber({
+    'steps': 'features/steps/*.steps.js'
+  }));
+});
 
 gulp.task('watch', function () {
   gulp.watch(['./**/*.js', '!./node_modules/**'], ['lint', 'server']);
@@ -40,6 +44,9 @@ gulp.task('watch', function () {
 gulp.task('watch-test', ['test'], function () {
   gulp.watch(['./**/*.js', '!./node_modules/**'], ['test']);
 });
+
+gulp.task('default', ['lint', 'server', 'watch']);
+gulp.task('test', ['server', 'cucumber']);
 
 // clean up if an error goes unhandled.
 process.on('exit', function () {
