@@ -1,22 +1,31 @@
 var request = require('supertest');
 request = request(process.env.URL || 'http://localhost:3000');
 var assert = require('chai').assert;
+var app = require('../server');
+var server;
 
 describe('POST /api/bids', function () {
   this.timeout(10000);
 
   before(function (done) {
-    //request.del('/api/items/1000')
-    //  .auth('lala@gmail.com', 'abcd1234')
-    //  .set('Content-Type', 'application/json')
-    //  .send({})
-    //  .end(done);
+    server = app.listen(process.env.PORT || '3000', function () {
 
-    request.post('/api/items')
-      .auth('lala@gmail.com', 'abcd1234')
-      .set('Content-Type', 'application/json')
-      .send({_id: 1000, description: 'test'})
-      .end(done);
+      //request.del('/api/items/1000')
+      //  .auth('lala@gmail.com', 'abcd1234')
+      //  .set('Content-Type', 'application/json')
+      //  .send({})
+      //  .end(done);
+
+      request.post('/api/items')
+        .auth('lala@gmail.com', 'abcd1234')
+        .set('Content-Type', 'application/json')
+        .send({_id: 1000, description: 'test'})
+        .end(done);
+    });
+  });
+
+  after(function (done) {
+    server.close(done);
   });
 
   it('should return error when credentials are not provided', function (done) {

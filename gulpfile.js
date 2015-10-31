@@ -27,8 +27,10 @@ gulp.task('lint', function () {
     .pipe(plugins.jshint.reporter('default'));
 });
 
-gulp.task('mocha', ['server'], function () {
-  return gulp.src('./tests/*.spec.js').pipe(plugins.mocha());
+gulp.task('mocha', function () {
+  return gulp.src('./tests/*.spec.js')
+    .pipe(plugins.mocha())
+    .pipe(plugins.exit());
 });
 
 gulp.task('watch', function () {
