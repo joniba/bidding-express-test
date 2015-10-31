@@ -2,18 +2,23 @@
   plugins = require('gulp-load-plugins')(),
   server = require('gulp-express');
 
-gulp.task('server', function () {
+gulp.task('server', function (done) {
   server.run(['--debug', 'bin/www']);
+
+  setTimeout(done, 1000);
 });
 
-gulp.task('cucumber', function () {
-  gulp.src('features/*')
+gulp.task('stop-test-server', ['cucumber'], function (done) {
+  server.stop();
+});
+
+gulp.task('cucumber', ['server'], function () {
+  return gulp.src('features/*')
     .pipe(plugins.cucumber({
       'steps': 'features/steps/*.steps.js',
       'support': 'features/support/*.js',
       'format': 'pretty'
     }));
-    //.pipe(plugins.exit());
 });
 
 gulp.task('lint', function () {
@@ -35,3 +40,4 @@ gulp.task('watch-test', ['test'], function () {
 });
 
 gulp.task('default', ['lint', 'server', 'watch']);
+gulp.task('test', ['server', 'cucumber', 'stop-test-server']);
