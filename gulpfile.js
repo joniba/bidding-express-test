@@ -18,7 +18,8 @@ gulp.task('cucumber', ['server'], function () {
       'steps': 'features/steps/*.steps.js',
       'support': 'features/support/*.js',
       'format': 'pretty'
-    }));
+    }))
+    .pipe(plugins.exit());
 });
 
 gulp.task('lint', function () {
