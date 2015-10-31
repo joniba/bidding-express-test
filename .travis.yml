@@ -6,5 +6,5 @@ node_js:
   - "iojs"
 before_script:
   - npm install -g gulp
-script: gulp test
+script: gulp test-mocha
 services: mongodb

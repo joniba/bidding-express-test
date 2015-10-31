@@ -8,7 +8,7 @@ gulp.task('server', function (done) {
   setTimeout(done, 1000);
 });
 
-gulp.task('stop-test-server', ['cucumber'], function (done) {
+gulp.task('stop-test-server', ['mocha'], function (done) {
   server.stop();
 });
 
@@ -27,7 +27,7 @@ gulp.task('lint', function () {
     .pipe(plugins.jshint.reporter('default'));
 });
 
-gulp.task('mocha', function () {
+gulp.task('mocha', ['server'], function () {
   return gulp.src('./tests/*.spec.js').pipe(plugins.mocha());
 });
 
@@ -41,3 +41,4 @@ gulp.task('watch-test', ['test'], function () {
 
 gulp.task('default', ['lint', 'server', 'watch']);
 gulp.task('test', ['server', 'cucumber', 'stop-test-server']);
+gulp.task('test-mocha', ['server', 'mocha', 'stop-test-server']);
