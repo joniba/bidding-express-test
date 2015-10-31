@@ -9,7 +9,7 @@ gulp.task('server', function (done) {
 });
 
 gulp.task('stop-test-server', ['mocha'], function (done) {
-  server.stop();
+  server.stop(done);
 });
 
 gulp.task('cucumber', ['server'], function () {

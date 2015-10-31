@@ -26,7 +26,7 @@
     "chai-match-json": "^0.1.1",
     "cucumber": "^0.7.0",
     "gulp": "^3.9.0",
-    "gulp-cucumber": "0.0.14",
+    "gulp-cucumber": "file:libs/gulp-cucumber",
     "gulp-exit": "0.0.2",
     "gulp-express": "^0.3.5",
     "gulp-jshint": "^1.11.2",

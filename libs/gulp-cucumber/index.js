@@ -1,0 +1,73 @@
+var path = require('path');
+var util = require('util');
+
+var glob = require('simple-glob');
+var through2 = require('through2');
+var Cucumber = require('cucumber');
+
+
+var clearFileCache = function (filePath) {
+    delete require.cache[require.resolve(path.resolve(filePath))];
+}
+
+module.exports = function (options) {
+    var files = [];
+    var runOptions = [];
+
+    if (options.support) {
+        files = files.concat(glob([].concat(options.support)));
+    }
+    if (options.steps) {
+        files = files.concat(glob([].concat(options.steps)));
+    }
+    files.forEach(function (file) {
+        clearFileCache(file);
+        runOptions.push('-r');
+        runOptions.push(file);
+    });
+
+    runOptions.push('-f');
+    var format = options.format || 'pretty';
+    runOptions.push(format);
+
+    if (options.tags) {
+        var tags = util.isArray(options.tags) ? options.tags : [options.tags];
+
+        tags.forEach(function (t) {
+            runOptions.push('--tags');
+            runOptions.push(t);
+        });
+    }
+
+    var features = [];
+
+    var collect = function (file, enc, callback) {
+        var filename = file.path;
+        if (filename.indexOf('.feature') === -1) {
+            return callback();
+        }
+        features.push(filename);
+        callback();
+    };
+
+    var run = function () {
+        var argv = ['node', 'cucumber-js'];
+
+        argv.push.apply(argv, runOptions);
+        argv.push.apply(argv, features);
+
+        var stream = this;
+        Cucumber.Cli(argv).run(function (succeeded) {
+            stream.emit('end');
+            if (!succeeded) {
+                stream.emit('error', new gutil.PluginError('gulp-cucumber', 'Cucumber tests failed!', {
+                    showStack: false
+                }));
+            }
+
+            stream.emit('end');
+        });
+    };
+
+    return through2.obj(collect, run);
+};

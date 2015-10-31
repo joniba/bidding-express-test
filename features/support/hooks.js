@@ -12,6 +12,7 @@ module.exports = function () {
   });
 
   this.registerHandler('AfterFeatures', function (event, done) {
+    console.log('---shutting down server---');
     server.close(done);
   });
 };
